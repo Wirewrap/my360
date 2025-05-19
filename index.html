@@ -2,33 +2,89 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>360 Viewer</title>
+    <title>360-bildväljare</title>
     <style>
       html, body {
         margin: 0;
         height: 100%;
-        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        font-family: sans-serif;
       }
+
       #panorama {
+        flex: 1;
         width: 100%;
-        height: 100%;
+      }
+
+      #buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+        background: #222;
+      }
+
+      #buttons button {
+        background: #444;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      #buttons button:hover {
+        background: #0af;
+      }
+
+      #buttons button.active {
+        background: #08f;
       }
     </style>
 
-    <!-- Pannellum CDN -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
   </head>
   <body>
     <div id="panorama"></div>
+    <div id="buttons">
+      <button data-src="IMG_01.jpg">Bild 1</button>
+      <button data-src="IMG_02.jpg">Bild 2</button>
+      <button data-src="IMG_03.jpg">Bild 3</button>
+      <button data-src="IMG_04.jpg">Bild 4</button>
+      <button data-src="IMG_05.jpg">Bild 5</button>
+    </div>
 
     <script>
-      pannellum.viewer('panorama', {
+      const viewer = pannellum.viewer('panorama', {
         type: 'equirectangular',
-        panorama: 'IMG_09.jpg', // Bilden måste ligga i samma mapp som index.htm
-        autoLoad: true,
-        showZoomCtrl: true
+        panorama: 'IMG_01.jpg',
+        autoLoad: true
       });
+
+      const buttons = document.querySelectorAll('#buttons button');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          const src = button.getAttribute('data-src');
+          viewer.loadScene('newScene', {
+            type: 'equirectangular',
+            panorama: src,
+            autoLoad: true
+          });
+
+          // Markera aktiv knapp
+          buttons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+        });
+      });
+
+      // Markera första knappen som aktiv från start
+      buttons[0].classList.add('active');
     </script>
   </body>
 </html>
