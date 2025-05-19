@@ -71,7 +71,7 @@
       buttons.forEach(button => {
         button.addEventListener('click', () => {
           const src = button.getAttribute('data-src');
-          viewer.loadScene('newScene', {
+          viewer.loadPanorama({
             type: 'equirectangular',
             panorama: src,
             autoLoad: true
